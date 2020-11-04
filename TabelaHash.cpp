@@ -32,7 +32,8 @@ typedef struct DadosTabela {
   string titulo = "";
   string generos = "";
   int totAvaliacoes = 0;
-  double media = 0;
+  // Soma de todas as notas dadas ao filme
+  double somaAval = 0;
   int id = 0;
   bool usado = false; //Se já foi usado alguma vez
   bool ocupado = false; // Se está sendo usado no momento
@@ -78,11 +79,7 @@ public:
     int pos = hash(rating.movieId);
     tabela[pos].totAvaliacoes += 1;
     // Atualiza os dados relativos à nota
-    if (tabela[pos].totAvaliacoes == 1) {
-      tabela[pos].media = rating.avaliacao;
-    } else {
-      tabela[pos].media = (tabela[pos].media + rating.avaliacao) / 2;
-    }
+    tabela[pos].somaAval += rating.avaliacao;
     tabela[pos].ocupado = true;
     tabela[pos].usado = true;
   }
@@ -109,7 +106,7 @@ public:
       if(tabela[pos].ocupado && tabela[pos].id == id) {
         tmp.generos = tabela[pos].generos;
         tmp.id = tabela[pos].id;
-        tmp.media = tabela[pos].media;
+        tmp.media = tabela[pos].somaAval / tabela[pos].totAvaliacoes;
         tmp.titulo = tabela[pos].titulo;
         tmp.totAvaliacoes = tabela[pos].totAvaliacoes;
         return tmp;
