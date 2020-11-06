@@ -35,7 +35,7 @@ class TabelaHash {
   // São 27,278 ids, então uma tabela com esse valor de M deve manter um desempenho bom,
   // ainda mais usando double hashing
   static const int M = 42337;
-  static const int segundoPrimo = 11117;
+  static const int segundoPrimo = 19609;
 private:
   DADOSTABELA tabela[M];
   int hash(int id) {
@@ -44,10 +44,13 @@ private:
      
     int pos = id % M;
     // Segundo hash em caso de colisão
-    while(tabela[pos].ocupado){
+    while(tabela[pos].ocupado && tabela[pos].id != id) {
       i++;
-      pos = (id + (i *(id % segundoPrimo))) % M;
+      pos = (id + (i *(1 + (id % segundoPrimo)))) % M;
+      //printf("POSIÇÃO: %d", pos);
+      //printf("pos: %d", pos);
     }
+    
     return pos;
   }
 public:
@@ -62,6 +65,7 @@ public:
     tabela[pos].totAvaliacoes += 1;
     // Atualiza os dados relativos à nota
     tabela[pos].somaAval += rating.avaliacao;
+    tabela[pos].id = rating.movieId;
     tabela[pos].ocupado = true;
     tabela[pos].usado = true;
   }
@@ -84,7 +88,7 @@ public:
     // Variavel temporária para formar o retorno da função
     DADOS tmp;
     do {
-      pos = (id + (i *(id % segundoPrimo))) % M;
+      pos = (id + (i *(1 + (id % segundoPrimo)))) % M;
       if(tabela[pos].ocupado && tabela[pos].id == id) {
         tmp.generos = tabela[pos].generos;
         tmp.id = tabela[pos].id;
