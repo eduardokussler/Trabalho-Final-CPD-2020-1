@@ -5,27 +5,16 @@
 // Total de avaliações
 // Média das avaliações
 // Id do filme - Chave
+
+
 #include <string>
 #include <iostream>
+#include "csv.h"
+#include "estruturas.h"
 
 using namespace std;
 
-// ********************************************
-// definição apenas para o editor não reclamar
-// MUDAR O LOCAL DA DEFINIÇÃO DEPOIS
-// ********************************************
-typedef struct rating {
-  int userId = 0;
-  int movieId = 0;
-  double avaliacao = 0;
-  string timestamp = "";
-} RATING;
 
-typedef struct movie {
-  int movieId = 0;
-  string titulo = "";
-  string generos = "";
-} MOVIE;
 
 // Estrutura que guarda os dados necessários para manipulação da tabela Hash
 typedef struct DadosTabela {
@@ -40,14 +29,7 @@ typedef struct DadosTabela {
 } DADOSTABELA;
 
 
-// Estrutura que guarda os dados usados nas demais partes do programa 
-typedef struct Dados {
-  string titulo = "";
-  string generos = "";
-  int totAvaliacoes = 0;
-  double media = 0;
-  int id = 0;
-} DADOS;
+
 
 class TabelaHash {
   // São 27,278 ids, então uma tabela com esse valor de M deve manter um desempenho bom,
@@ -119,3 +101,4 @@ public:
     return tmp;
   }
 };
+
