@@ -2,6 +2,7 @@
 #include <string>
 #include "csv.h"
 #include "TabelaHash.h"
+#include "Tags.h"
 
 using namespace io;
 using namespace std;
@@ -13,6 +14,7 @@ int main() {
   string lixo;
   DADOS busca;
   TabelaHash* hashtable = new TabelaHash();
+  TagsFilme* tabelaTags = new TagsFilme();
   CSVReader<4, trim_chars<' '>, double_quote_escape<',','\"'>> minirating ("./Dados_clean/rating.csv");
   minirating.read_header(ignore_no_column,"userId","movieId","rating","timestamp");
   while(minirating.read_row(avaliacao.userId, avaliacao.movieId,avaliacao.avaliacao, lixo)) {
@@ -26,8 +28,14 @@ int main() {
    //printf("movieID: %d\n title: %s, genres: %s", filme.movieId, filme.titulo.c_str(), filme.generos.c_str());
   }
  
-  busca = hashtable->busca(260);
-  cout << busca.titulo << endl;
-
+  CSVReader<4, trim_chars<' '>, double_quote_escape<',','\"'>> tags ("./Dados_clean/tag_clean.csv");
+  tags.read_header(ignore_no_column,"userId","movieId","tag","timestamp");
+  TAG tagLida;
+  int user;
+  while(tags.read_row(user, tagLida.movieId, tagLida.tag, lixo)) {
+    tabelaTags->insere(tagLida);
+  }
+  // Resultado esperado = 8641
+  cout << tabelaTags->busca("Steve Carell")[0] << endl;
   return 0;
 }

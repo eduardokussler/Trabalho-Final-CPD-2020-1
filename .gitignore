@@ -8,3 +8,5 @@ Trabalho final de CPD 2020 - MovieLens 20M.pdf
 Dados_clean/.~lock.movie_clean.csv#
 Dados_clean/.~lock.rating.csv#
 Dados_clean/.~lock.minirating.csv#
+totTags
+conta_tags.cpp
