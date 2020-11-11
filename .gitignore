@@ -11,3 +11,6 @@ Dados_clean/.~lock.minirating.csv#
 totTags
 conta_tags.cpp
 .vscode/settings.json
+.depend
+*.o
+trab
