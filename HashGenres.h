@@ -3,14 +3,17 @@
 #include <string>
 #include <sstream>
 #include <iostream>
+#include <algorithm>
 
 class HashGenres
 {
 public:
+	const std::vector<int> empty;
+
 	HashGenres(int size);
 
-	const std::vector<int>& get(const std::string &genre);
-	void insert(int ID, const std::string &genres);
+	const std::vector<int>& get(std::string genre);
+	void insert(int ID, std::string genres);
 private:
 	unsigned hashCode(const std::string &genre);
 	std::vector<std::string> parse(const std::string &genres);;

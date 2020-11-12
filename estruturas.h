@@ -9,6 +9,19 @@ typedef struct dados {
   int totAvaliacoes = 0;
   double media = 0;
   int id = 0;
+
+  bool operator==(const dados& op)
+  {
+    return this->id == op.id;
+  }
+  bool operator!=(const dados& op)
+  {
+    return this->id != op.id;
+  }
+  bool operator<(const dados& op)
+  {
+    return this->id < op.id;
+  }
 } DADOS;
 
 // Estrutura de leitura dos dados do arquivo rating.csv

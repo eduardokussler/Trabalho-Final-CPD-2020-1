@@ -5,6 +5,8 @@
 class HashRatings
 {
 public:
+	const std::vector<Rating> empty;
+
 	HashRatings(int size);
 
 	const std::vector<Rating>& get(int val);

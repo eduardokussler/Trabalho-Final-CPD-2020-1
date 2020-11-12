@@ -8,19 +8,26 @@ HashGenres::HashGenres(int size)
     genre_name = std::vector<std::string>(size,"");
 }
 
-const std::vector<int>& HashGenres::get(const std::string &genre)
+const std::vector<int>& HashGenres::get(std::string genre)
 {
+    transform(genre.begin(), genre.end(), genre.begin(), ::toupper);
     int hash = hashCode(genre);
+    int i = 0;
     while (genre_name[hash] != genre) {
         hash = (hash + 1) % size;
+        ++i;
+        if(i == size) {
+            return empty;
+        }
     }
     return hashTable[hash];
 }
 
-void HashGenres::insert(int ID, const std::string &genres)
+void HashGenres::insert(int ID, std::string genres)
 {
     std::vector<std::string> genre_list = parse(genres);
     for (std::string genre: genre_list) {
+        transform(genre.begin(), genre.end(), genre.begin(), ::toupper);
         unsigned hash = hashCode(genre);
         while (genre_name[hash] != "" && genre_name[hash] != genre) {
             hash = (hash + 1) % size;

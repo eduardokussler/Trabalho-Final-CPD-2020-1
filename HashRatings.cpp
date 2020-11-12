@@ -17,5 +17,8 @@ void HashRatings::insert(int val, int ID, double rating)
 
 const std::vector<Rating> &HashRatings::get(int val)
 {
+    if (val < 0 || val > hashTable.size() - 1) {
+        return empty;
+    }
     return hashTable[hashCode(val)];
 }
