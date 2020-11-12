@@ -1,16 +1,12 @@
 
 Dados_clean.zip
-Dados_clean/movie_clean.csv
-Dados_clean/minirating.csv
-Dados_clean/rating.csv
-Dados_clean/tag_clean.csv
+
+Dados_clean/
 Trabalho final de CPD 2020 - MovieLens 20M.pdf
-Dados_clean/.~lock.movie_clean.csv#
-Dados_clean/.~lock.rating.csv#
-Dados_clean/.~lock.minirating.csv#
 totTags
+.vs/
 conta_tags.cpp
-.vscode/settings.json
+.vscode/
 .depend
 *.o
 trab

@@ -5,6 +5,7 @@
 #include "HashRatings.h"
 #include "Trie.h"
 #include "Tags.h"
+#include "HashGenres.h"
 
 using namespace io;
 using namespace std;
@@ -19,6 +20,7 @@ int main() {
   TagsFilme* tabelaTags = new TagsFilme();
   HashRatings hr(138493);
   Trie tr;
+  HashGenres hg(41);
 
   CSVReader<4, trim_chars<' '>, double_quote_escape<',','\"'>> minirating ("./Dados_clean/rating.csv");
   minirating.read_header(ignore_no_column,"userId","movieId","rating","timestamp");
@@ -33,6 +35,7 @@ int main() {
   while(movie_clean.read_row(filme.movieId, filme.titulo, filme.generos)) {
    hashtable->insere(filme);
    tr.insert(filme.titulo, filme.movieId);
+   hg.insert(filme.movieId, filme.generos);
    //printf("movieID: %d\n title: %s, genres: %s", filme.movieId, filme.titulo.c_str(), filme.generos.c_str());
   }
  
@@ -53,6 +56,10 @@ int main() {
     for (auto i : ls2) {
         std::cout << i.getID() << " " << i.getRating() << std::endl;
     }
+  auto ls3 = hg.get("Horror");
+  for (auto i : ls3) {
+      std::cout << i << std::endl;
+  }
 
 
   // Resultado esperado = 8641

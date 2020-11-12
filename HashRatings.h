@@ -12,7 +12,6 @@ public:
 private:
 	int hashCode(int val);
 
-	int size;
 	std::vector<std::vector<Rating>> hashTable;
 };
 
