@@ -60,7 +60,7 @@ private:
     long unsigned int chave = calcChave(tag);
     int pos = chave % M;
     // Segundo hash em caso de colisão
-    while(tabela[pos].ocupado && tabela[pos].chave != chave) {
+    while(tabela[pos].ocupado && tabela[pos].tag != tag) {
       i++;
       pos = (chave + (i *(1 + (chave % segundoPrimo)))) % M;
       //printf("POSIÇÃO: %d", pos);
@@ -107,7 +107,7 @@ public:
     // Variavel temporária para formar o retorno da função
     do {
       pos = (chave + (i *(1 + (chave % segundoPrimo)))) % M;
-      if(tabela[pos].ocupado && tabela[pos].chave == chave) {
+      if(tabela[pos].ocupado && tabela[pos].tag == tagBusca) {
         return tabela[pos].movieIds;
       } else {
         i++;

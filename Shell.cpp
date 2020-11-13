@@ -52,7 +52,8 @@ std::vector<std::string> Shell::parseTags(std::string str) {
     std::size_t pos;
     while((pos = str.find(delimiter)) != std::string::npos) {
         std::string token = str.substr(0, pos);
-        token = trim(token);
+        token = token.substr(1,token.size() - 1);
+        //token = trim(token);
         lst.push_back(token);
         str.erase(0, pos + delimiter.length());
         str = trim(str);
@@ -78,6 +79,7 @@ bool Shell::OnlySpaces(const std::string &str) {
 void Shell::readShell()
 {
     std::string name;
+    std::cout << "$ ";
     while(std::getline(std::cin, name)) {
         std::string delimiter = " ";
         auto pos = name.find(delimiter);
@@ -117,6 +119,7 @@ void Shell::readShell()
         } catch(exception e) {
             std::cout << "Invalid Args" << std::endl;
         }
+        std::cout << "$ ";
     }
 }
 
