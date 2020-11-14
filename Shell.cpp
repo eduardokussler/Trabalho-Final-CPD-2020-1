@@ -8,9 +8,9 @@ void Shell::readFiles()
     TAG tagLida;
     int user;
 
-    io::CSVReader<4, io::trim_chars<' '>, io::double_quote_escape<',', '\"'>> minirating("./Dados_clean/rating.csv");
-    minirating.read_header(io::ignore_no_column, "userId", "movieId", "rating", "timestamp");
-    while (minirating.read_row(avaliacao.userId, avaliacao.movieId, avaliacao.avaliacao, lixo)) {
+    io::CSVReader<4, io::trim_chars<' '>, io::double_quote_escape<',', '\"'>> rating("./Dados_clean/rating.csv");
+    rating.read_header(io::ignore_no_column, "userId", "movieId", "rating", "timestamp");
+    while (rating.read_row(avaliacao.userId, avaliacao.movieId, avaliacao.avaliacao, lixo)) {
         hashtable->insere(avaliacao);
         hashRatings.insert(avaliacao.userId, avaliacao.movieId, avaliacao.avaliacao);
     }
@@ -31,51 +31,6 @@ void Shell::readFiles()
     std::cout << "Estruturas Carregadas" << std::endl;
 }
 
-string Shell::trim(const string& str)
-{
-    size_t first = str.find_first_not_of(' ');
-    if (string::npos == first){
-        return str;
-    }
-    size_t last = str.find_last_not_of(' ');
-    return str.substr(first, (last - first + 1));
-}
-
-std::vector<std::string> Shell::parseTags(std::string str) {
-    str = trim(str);
-    std::vector<std::string> lst;
-    std::string delimiter = "'";
-
-    if (str[0] != '\'')
-        throw exception();
-    str[0] = ' ';
-    std::size_t pos;
-    while((pos = str.find(delimiter)) != std::string::npos) {
-        std::string token = str.substr(0, pos);
-        token = token.substr(1,token.size() - 1);
-        //token = trim(token);
-        lst.push_back(token);
-        str.erase(0, pos + delimiter.length());
-        str = trim(str);
-        if (str.length() == 0) {
-            return lst;
-        }
-        if (str[0] != '\'') {
-            throw exception();
-        }
-        str[0] = ' ';
-    }
-    throw exception();
-}
-
-bool Shell::OnlySpaces(const std::string &str) {
-    for(auto i:str) {
-        if (i != ' ')
-            return false;
-    }
-    return true;
-}
-
 void Shell::readShell()
 {
     std::string name;
@@ -86,7 +41,7 @@ void Shell::readShell()
         
         std::string token = name.substr(0, pos); 
         name.erase(0, pos + delimiter.length());
-        ////name.
+
         try {
             if ((token == "exit" && pos == std::string::npos) || (token== "exit" && OnlySpaces(name)))
                 break;
@@ -114,10 +69,10 @@ void Shell::readShell()
                     throw exception();
                 topGenre(n, name);
             } else {
-                std::cout << "Unknown Command" << std::endl;
+                std::cout << "Invalid Command" << std::endl;
             }
         } catch(exception e) {
-            std::cout << "Invalid Args" << std::endl;
+            std::cout << "Invalid Command" << std::endl;
         }
         std::cout << "$ ";
     }
@@ -127,8 +82,8 @@ void Shell::movie(const std::string& str)
 {
     std::vector<DADOS> filmes;
     auto lstIDS = trie.substringSearch(str);
-    for(auto ids: lstIDS){
-        filmes.push_back(hashtable->busca(ids));
+    for(auto id: lstIDS){
+        filmes.push_back(hashtable->busca(id));
     }
     quicksort_mean(filmes, 0, filmes.size() - 1);
     printTable(filmes);
@@ -189,79 +144,6 @@ void Shell::tags(std::vector<std::string>& tagList)
     printTable(filmes);
 }
 
-
-std::vector<DADOS> Shell::intersection(std::vector<DADOS> l1, std::vector<DADOS> l2) {
-    std::vector<DADOS> lnew;
-    for(auto v1: l1) {
-        if(find(l2.begin(), l2.end(), v1) != l2.end()) {
-            lnew.push_back(v1);
-        }   
-    }
-    return lnew;
-}
-
-
-int Shell::partition_id(std::vector<DADOS> &filmes, int lo, int hi) {
-    int pivot = filmes[lo].id;
-    int i = lo, j = hi + 1;
-    while (true) {
-        while (filmes[++i].id > pivot)
-            if (i == hi) break;
-
-        while (pivot > filmes[--j].id)
-            if (j == lo) break;
-
-        if (i >= j)
-            break;
-        if (filmes[i] != filmes[j]) {
-            std::swap(filmes[i], filmes[j]);
-        }
-    }
-    if (filmes[lo] != filmes[j]) {
-        std::swap(filmes[lo], filmes[j]);
-    }
-    return j;
-}
-
-void Shell::quicksort_id(std::vector<DADOS> &filmes, int lo, int hi) {
-    if (lo < hi) {
-        int j = partition_id(filmes, lo, hi);
-        quicksort_id(filmes, lo, j - 1);
-        quicksort_id(filmes, j + 1, hi);
-    }
-}
-
-
-int Shell::partition_mean(std::vector<DADOS> &filmes, int lo, int hi) {
-    double pivot = filmes[lo].media;
-    int i = lo, j = hi + 1;
-    while (true) {
-        while (filmes[++i].media > pivot)
-            if (i == hi) break;
-
-        while (pivot > filmes[--j].media)
-            if (j == lo) break;
-
-        if (i >= j)
-            break;
-        if (filmes[i] != filmes[j]) {
-            std::swap(filmes[i], filmes[j]);
-        }
-    }
-    if (filmes[lo] != filmes[j]) {
-        std::swap(filmes[lo], filmes[j]);
-    }
-    return j;
-}
-
-void Shell::quicksort_mean(std::vector<DADOS> &filmes, int lo, int hi) {
-    if (lo < hi) {
-        int j = partition_mean(filmes, lo, hi);
-        quicksort_mean(filmes, lo, j - 1);
-        quicksort_mean(filmes, j + 1, hi);
-    }
-}
-
 void Shell::printTable(const std::vector<DADOS>& table)
 {
     TextTable t('-', '|', '+');
@@ -290,21 +172,19 @@ void Shell::printTable(const std::vector<DADOS>& table)
         t.endOfRow();
     }
 
-    t.setAlignment(2, TextTable::Alignment::RIGHT);
     std::cout << t;
 }
 
 void Shell::printTable(const std::vector<DADOS>& table, std::vector<Rating> &ratings)
 {
     TextTable t('-', '|', '+');
-    std::vector<std::string> headers = {"Rating","movieID","Title","Genres","Rating","Count"};
+    std::vector<std::string> headers = {"user_rating","movieID","Title","Genres","global_rating","Count"};
 
     for (const std::string &header : headers) {
         t.add(header);
     }
     t.endOfRow();
-
-    int i = 0;
+    
     if(table.empty()) {
         t.add("");
         t.add("");
@@ -315,6 +195,7 @@ void Shell::printTable(const std::vector<DADOS>& table, std::vector<Rating> &rat
         t.endOfRow();
     }
 
+    int i = 0;
     for(DADOS line: table) {
         t.add(std::to_string(ratings[i].getRating()));
         t.add(std::to_string(line.id));
@@ -326,6 +207,91 @@ void Shell::printTable(const std::vector<DADOS>& table, std::vector<Rating> &rat
         ++i;
     }
 
-    t.setAlignment(2, TextTable::Alignment::RIGHT);
     std::cout << t;
+}
+
+string Shell::trim(const string& str)
+{
+    size_t first = str.find_first_not_of(' ');
+    if (string::npos == first){
+        return str;
+    }
+    size_t last = str.find_last_not_of(' ');
+    return str.substr(first, (last - first + 1));
+}
+
+int Shell::partition_mean(std::vector<DADOS> &filmes, int lo, int hi) 
+{
+    double pivot = filmes[lo].media;
+    int i = lo, j = hi + 1;
+    while (true) {
+        while (filmes[++i].media > pivot)
+            if (i == hi) break;
+
+        while (pivot > filmes[--j].media)
+            if (j == lo) break;
+
+        if (i >= j)
+            break;
+        std::swap(filmes[i], filmes[j]);
+        
+    }
+    std::swap(filmes[lo], filmes[j]);
+    return j;
+}
+
+void Shell::quicksort_mean(std::vector<DADOS> &filmes, int lo, int hi) 
+{
+    if (lo < hi) {
+        int j = partition_mean(filmes, lo, hi);
+        quicksort_mean(filmes, lo, j - 1);
+        quicksort_mean(filmes, j + 1, hi);
+    }
+}
+
+std::vector<DADOS> Shell::intersection(std::vector<DADOS> l1, std::vector<DADOS> l2) 
+{
+    std::vector<DADOS> lnew;
+    for(auto v1: l1) {
+        if(find(l2.begin(), l2.end(), v1) != l2.end()) {
+            lnew.push_back(v1);
+        }   
+    }
+    return lnew;
+}
+
+std::vector<std::string> Shell::parseTags(std::string str) 
+{
+    str = trim(str);
+    std::vector<std::string> lst;
+    std::string delimiter = "'";
+
+    if (str[0] != '\'')
+        throw exception();
+    str[0] = ' ';
+    std::size_t pos;
+    while((pos = str.find(delimiter)) != std::string::npos) {
+        std::string token = str.substr(0, pos);
+        token = token.substr(1,token.size() - 1);
+        lst.push_back(token);
+        str.erase(0, pos + delimiter.length());
+        str = trim(str);
+        if (str.length() == 0) {
+            return lst;
+        }
+        if (str[0] != '\'') {
+            throw exception();
+        }
+        str[0] = ' ';
+    }
+    throw exception();
+}
+
+bool Shell::OnlySpaces(const std::string &str) 
+{
+    for(auto i:str) {
+        if (i != ' ')
+            return false;
+    }
+    return true;
 }

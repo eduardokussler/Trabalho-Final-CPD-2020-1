@@ -11,7 +11,7 @@ HashGenres::HashGenres(int size)
 const std::vector<int>& HashGenres::get(std::string genre)
 {
     transform(genre.begin(), genre.end(), genre.begin(), ::toupper);
-    int hash = hashCode(genre);
+    unsigned hash = hashCode(genre);
     int i = 0;
     while (genre_name[hash] != genre) {
         hash = (hash + 1) % size;
