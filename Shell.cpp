@@ -29,6 +29,7 @@ void Shell::readFiles()
         tabelaTags->insere(tagLida);
     }
     std::cout << "Estruturas Carregadas" << std::endl;
+    
 }
 
 void Shell::readShell()
@@ -43,8 +44,11 @@ void Shell::readShell()
         name.erase(0, pos + delimiter.length());
 
         try {
-            if ((token == "exit" && pos == std::string::npos) || (token== "exit" && OnlySpaces(name)))
+            if ((token == "exit" && pos == std::string::npos) || (token== "exit" && OnlySpaces(name))) {
+                delete tabelaTags;
+                delete hashtable;
                 break;
+            }
             if(pos == std::string::npos) {
                 throw exception();
             }

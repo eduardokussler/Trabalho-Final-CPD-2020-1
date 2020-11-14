@@ -35,7 +35,7 @@ typedef struct posechave {
 
 
 class TagsFilme {
-  // São 27,278 ids, então uma tabela com esse valor de M deve manter um desempenho bom,
+  // São 465,564 tags, então uma tabela com esse valor de M deve manter um desempenho bom,
   // ainda mais usando double hashing
   static const int M = 550129;
   static const int segundoPrimo = 182659;
@@ -45,7 +45,7 @@ private:
   long unsigned int calcChave(string nome) {
     long unsigned int chave = 0;
     int a = 37;
-    for(int i = 0; i < nome.length(); i++){
+    for(int i = 0; i < nome.length(); i++) {
       // Atribui um peso a cada caractere do nome
       chave += (int)nome[i] * (int)pow(a, i);
     }
@@ -59,9 +59,9 @@ private:
     int i = 0;
     long unsigned int chave = calcChave(tag);
     int pos = chave % M;
-    // Segundo hash em caso de colisão
     while(tabela[pos].ocupado && tabela[pos].tag != tag) {
       i++;
+      // Segundo hash em caso de colisão
       pos = (chave + (i *(1 + (chave % segundoPrimo)))) % M;
       //printf("POSIÇÃO: %d", pos);
       //printf("pos: %d", pos);
@@ -74,18 +74,17 @@ private:
   }
 public:
   TagsFilme() = default;
-  // Insere pode receber dados de ratings.csv ou de movie.csv, e cada tem um comportamento
-  // diferente para cada um
 
 
-  // Insere recebendo um rating, apenas atualiza a média e o total de avaliações e movieId
   void insere(TAG tag) {
+    // Coloca as tags para maiúsculo
     transform(tag.tag.begin(), tag.tag.end(), tag.tag.begin(), ::toupper);
     POSECHAVE posEchave = hash(tag.tag);
     int pos = posEchave.pos;
     long unsigned int chave = posEchave.chave;
     tabela[pos].chave = chave;
     tabela[pos].tag = tag.tag;
+    // Testa se o filme já está incluso no vetor de ids
     if(find(tabela[pos].movieIds.begin(), tabela[pos].movieIds.end(), tag.movieId) == tabela[pos].movieIds.end()) {
       tabela[pos].movieIds.push_back(tag.movieId);
     }
@@ -99,12 +98,12 @@ public:
   // Retorna um vector com -1 se não encontrou; 
   vector<int> busca(string tagBusca) {
     int pos = 0;
+    // Coloca a tag para letra maiúscula
     transform(tagBusca.begin(), tagBusca.end(), tagBusca.begin(), ::toupper);
     POSECHAVE posEchave = hash(tagBusca);
     long unsigned int chave = posEchave.chave;
     int i = 0;
     pos = posEchave.pos;
-    // Variavel temporária para formar o retorno da função
     do {
       pos = (chave + (i *(1 + (chave % segundoPrimo)))) % M;
       if(tabela[pos].ocupado && tabela[pos].tag == tagBusca) {

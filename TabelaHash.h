@@ -40,21 +40,20 @@ private:
   DADOSTABELA tabela[M];
   int hash(int id) {
     int i = 0;
-    // Segundo número primo a ser usado no double hashing
      
     int pos = id % M;
-    // Segundo hash em caso de colisão
     while(tabela[pos].ocupado && tabela[pos].id != id) {
       i++;
+      // Segundo hash em caso de colisão
       pos = (id + (i *(1 + (id % segundoPrimo)))) % M;
-      //printf("POSIÇÃO: %d", pos);
-      //printf("pos: %d", pos);
     }
     
     return pos;
   }
 public:
   TabelaHash() = default;
+
+
   // Insere pode receber dados de ratings.csv ou de movie.csv, e cada tem um comportamento
   // diferente para cada um
 
@@ -62,9 +61,12 @@ public:
   // Insere recebendo um rating, apenas atualiza a média e o total de avaliações e movieId
   void insere(RATING rating) {
     int pos = hash(rating.movieId);
-    tabela[pos].totAvaliacoes += 1;
     // Atualiza os dados relativos à nota
+    tabela[pos].totAvaliacoes += 1;
     tabela[pos].somaAval += rating.avaliacao;
+
+    // Caso o arquivo de rating seja acessado primeiro
+    // esses campos precisam ser preenchidos para não haver perda de dados
     tabela[pos].id = rating.movieId;
     tabela[pos].ocupado = true;
     tabela[pos].usado = true;

@@ -15,7 +15,6 @@ class Shell
 {
 public:
 	Shell() : hashtable(new TabelaHash()), tabelaTags(new TagsFilme()), hashRatings(138497), trie(), hashGenres(41){}
-
 	void readFiles();
 	void readShell();
 private:
