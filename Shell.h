@@ -13,8 +13,9 @@
 
 class Shell
 {
+
 public:
-	Shell() : hashtable(new TabelaHash()), tabelaTags(new TagsFilme()), hashRatings(138497), trie(), hashGenres(41){}
+	Shell() : hashtable(std::make_shared<TabelaHash>()), tabelaTags(std::make_shared<TagsFilme>()), hashRatings(138497), trie(), hashGenres(41){}
 	void readFiles();
 	void readShell();
 private:
@@ -33,8 +34,8 @@ private:
 	std::vector<std::string> parseTags(std::string str);
 	bool OnlySpaces(const std::string &str);
 
-	TabelaHash* hashtable;
-	TagsFilme* tabelaTags;
+	std::shared_ptr<TabelaHash> hashtable;
+	std::shared_ptr<TagsFilme> tabelaTags;
 	HashRatings hashRatings;
 	Trie trie;
 	HashGenres hashGenres;

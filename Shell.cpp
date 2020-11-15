@@ -45,8 +45,6 @@ void Shell::readShell()
 
         try {
             if ((token == "exit" && pos == std::string::npos) || (token== "exit" && OnlySpaces(name))) {
-                delete tabelaTags;
-                delete hashtable;
                 break;
             }
             if(pos == std::string::npos) {
