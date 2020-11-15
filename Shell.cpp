@@ -34,44 +34,46 @@ void Shell::readFiles()
 
 void Shell::readShell()
 {
-    std::string name;
+    std::string str;
     std::cout << "$ ";
-    while(std::getline(std::cin, name)) {
+    while(std::getline(std::cin, str)) {
         std::string delimiter = " ";
-        auto pos = name.find(delimiter);
-        
-        std::string token = name.substr(0, pos); 
-        name.erase(0, pos + delimiter.length());
+        auto pos = str.find(delimiter);  
+        std::string token = str.substr(0, pos); 
 
         try {
-            if ((token == "exit" && pos == std::string::npos) || (token== "exit" && OnlySpaces(name))) {
-                break;
-            }
-            if(pos == std::string::npos) {
-                throw exception();
-            }
-            if(token == "user") {
-                int userID = std::stoi(name);
-                user(userID);
-            }else if (token == "tags") {
-                auto lstTags = parseTags(name);
-                tags(lstTags);
-            }else if (token == "movie") {
-                name = trim(name);
-                if (name.size() == 0) 
-                    throw exception();
-                movie(name);
-            } else if (token.size() >= 3 && token.substr(0, 3) == "top"){
-                int n = std::stoi(token.erase(0, 3));
-                if (n <= 0)
-                    throw exception();
-                name = trim(name);
-
-                if (name.size() == 0) 
-                    throw exception();
-                topGenre(n, name);
+            if (pos == std::string::npos) {
+                if (token == "exit")
+                    break;
+                else
+                    throw exception();   
             } else {
-                std::cout << "Invalid Command" << std::endl;
+                str.erase(0, pos + delimiter.length());
+                if (token == "exit" && OnlySpaces(str)){
+                    break;
+                } else if(token == "user") {
+                    int userID = std::stoi(str);
+                    user(userID);
+                }else if (token == "tags") {
+                    auto lstTags = parseTags(str);
+                    tags(lstTags);
+                }else if (token == "movie") {
+                    str = trim(str);
+                    if (OnlySpaces(str)) 
+                        throw exception();
+                    movie(str);
+                } else if (token.size() > 3 && token.substr(0, 3) == "top"){
+                    int n = std::stoi(token.erase(0, 3));
+                    if (n <= 0)
+                        throw exception();
+                    str = trim(str);
+
+                    if (OnlySpaces(str)) 
+                        throw exception();
+                    topGenre(n, str);
+                } else {
+                    throw exception();
+                }
             }
         } catch(exception e) {
             std::cout << "Invalid Command" << std::endl;
