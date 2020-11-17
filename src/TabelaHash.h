@@ -9,6 +9,7 @@
 
 #include <string>
 #include <iostream>
+#include <vector>
 #include "estruturas.h"
 
 using namespace std;
@@ -33,10 +34,10 @@ typedef struct DadosTabela {
 class TabelaHash {
   // São 27,278 ids, então uma tabela com esse valor de M deve manter um desempenho bom,
   // ainda mais usando double hashing
-  static const int M = 42337;
   static const int segundoPrimo = 19609;
 private:
-  DADOSTABELA tabela[M];
+  const int M;
+  vector<DADOSTABELA> tabela;
   int hash(int id) {
     int i = 0;
      
@@ -50,7 +51,7 @@ private:
     return pos;
   }
 public:
-  TabelaHash() = default;
+  TabelaHash(int size) : M(size), tabela(size){}
 
 
   // Insere pode receber dados de ratings.csv ou de movie.csv, e cada tem um comportamento

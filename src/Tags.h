@@ -6,6 +6,7 @@
 #include <math.h>
 #include <string>
 #include <iostream>
+#include <vector>
 
 
 using namespace std;
@@ -36,10 +37,10 @@ typedef struct posechave {
 class TagsFilme {
   // São 465,564 tags, então uma tabela com esse valor de M deve manter um desempenho bom,
   // ainda mais usando double hashing
-  static const int M = 550129;
   static const int segundoPrimo = 182659;
 private:
-  DADOSTABELATAG tabela[M];
+  const int M;
+  vector<DADOSTABELATAG> tabela;
   // Calcula o inteiro correspondente a string de tag
   long unsigned int calcChave(string nome) {
     long unsigned int chave = 0;
@@ -72,7 +73,7 @@ private:
     return posEchave;
   }
 public:
-  TagsFilme() = default;
+  TagsFilme(int size) : M(size), tabela(size){}
 
 
   void insere(TAG tag) {

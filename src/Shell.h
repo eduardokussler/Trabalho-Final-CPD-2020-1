@@ -15,7 +15,7 @@ class Shell
 {
 
 public:
-	Shell() : hashtable(std::make_shared<TabelaHash>()), tabelaTags(std::make_shared<TagsFilme>()), hashRatings(138497), trie(), hashGenres(41){}
+	Shell(int sizeHM, int sizeHT, int sizeHR, int sizeHG) : hashtable(std::make_shared<TabelaHash>(sizeHM)), tabelaTags(std::make_shared<TagsFilme>(sizeHT)), hashRatings(sizeHR), trie(), hashGenres(sizeHG){}
 	void readFiles();
 	void readShell();
 private:
