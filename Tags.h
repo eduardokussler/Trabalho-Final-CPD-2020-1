@@ -6,7 +6,6 @@
 #include <math.h>
 #include <string>
 #include <iostream>
-#include "csv.h"
 
 
 using namespace std;
@@ -77,8 +76,6 @@ public:
 
 
   void insere(TAG tag) {
-    // Coloca as tags para maiúsculo
-    transform(tag.tag.begin(), tag.tag.end(), tag.tag.begin(), ::toupper);
     POSECHAVE posEchave = hash(tag.tag);
     int pos = posEchave.pos;
     long unsigned int chave = posEchave.chave;
@@ -98,8 +95,6 @@ public:
   // Retorna um vector com -1 se não encontrou; 
   vector<int> busca(string tagBusca) {
     int pos = 0;
-    // Coloca a tag para letra maiúscula
-    transform(tagBusca.begin(), tagBusca.end(), tagBusca.begin(), ::toupper);
     POSECHAVE posEchave = hash(tagBusca);
     long unsigned int chave = posEchave.chave;
     int i = 0;

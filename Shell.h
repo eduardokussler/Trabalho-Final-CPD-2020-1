@@ -1,12 +1,12 @@
 #pragma once
 #include <iostream>
-#include "csv.h"
+#include "../libs/csv.h"
 #include "TabelaHash.h"
 #include "HashRatings.h"
 #include "Trie.h"
 #include "Tags.h"
 #include "HashGenres.h"
-#include "TextTable.h"
+#include "../libs/TextTable.h"
 #include <algorithm>
 
 

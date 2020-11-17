@@ -9,7 +9,6 @@
 
 #include <string>
 #include <iostream>
-#include "csv.h"
 #include "estruturas.h"
 
 using namespace std;
