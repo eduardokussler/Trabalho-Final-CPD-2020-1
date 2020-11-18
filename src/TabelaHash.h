@@ -94,7 +94,7 @@ public:
       if(tabela[pos].ocupado && tabela[pos].id == id) {
         tmp.generos = tabela[pos].generos;
         tmp.id = tabela[pos].id;
-        if (tabela[pos].somaAval > 0) {
+        if (tabela[pos].totAvaliacoes > 0) {
           tmp.media = tabela[pos].somaAval / tabela[pos].totAvaliacoes;
         } else {
           tmp.media = 0;
