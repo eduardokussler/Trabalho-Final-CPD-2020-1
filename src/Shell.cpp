@@ -70,6 +70,9 @@ void Shell::readShell()
 
                     if (OnlySpaces(str)) 
                         throw exception();
+                    if (!(str.length() >= 2 && str[0] == '\'' && str[str.length() - 1] == '\''))
+                        throw exception();
+                    str = str.substr(1,str.length()-2);
                     topGenre(n, str);
                 } else {
                     throw exception();
